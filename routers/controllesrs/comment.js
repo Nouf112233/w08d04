@@ -129,27 +129,29 @@ const deleteCommentByPost = (req, res) => {
           .find({ $and: [{ _id: post }, { isdeleted: false }, { user: user }] })
           .then((result) => {
             if (result.length > 0) {
-            commentModel
-              .findOne({
-                $and: [{ _id: _id }, { post: post }, { isdeleted: false }],
-              })
-              .then(async (resultt) => {
-                if (resultt) {
-                await commentModel.findOneAndUpdate(
-                  { _id: _id },
-                  { isdeleted: false },
-                  {
-                    new: true,
+              commentModel
+                .findOne({
+                  $and: [{ _id: _id }, { post: post }, { isdeleted: false }],
+                })
+                .then(async (resultt) => {
+                  if (resultt) {
+                    await commentModel.findOneAndUpdate(
+                      { _id: _id },
+                      { isdeleted: false },
+                      {
+                        new: true,
+                      }
+                    );
+                    res
+                      .status(200)
+                      .json({
+                        message: "comment has been deleted successfully",
+                      });
                   }
-                );
-                res
-                  .status(200)
-                  .json({ message: "comment has been deleted successfully" });
-                }
-              })
-              .catch((err) => {
-                res.status(400).send("comment not found");
-              });
+                })
+                .catch((err) => {
+                  res.status(400).send("comment not found");
+                });
             }
           })
           .catch((err) => {
