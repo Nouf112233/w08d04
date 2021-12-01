@@ -22,6 +22,9 @@ app.use(postRouter);
 const commentRouter = require("./routers/routes/comment");
 app.use(commentRouter);
 
+const likeRouter = require("./routers/routes/like");
+app.use(likeRouter);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

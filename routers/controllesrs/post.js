@@ -8,7 +8,7 @@ const commentModel = require("./../../db/models/comment");
     const { disc, user,image } = req.body;
   
     userModel
-      .findById({ _id: user })
+      .findOne({$and: [{_id: user},{isdeleted:false}] })
       .then((result) => {
         if (result) {
           const newPost = new postModel({
