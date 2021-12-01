@@ -69,9 +69,22 @@ const login = (req, res) => {
         res.status(400).json(err);
       });
   };
+
+  const deleteUser = (req, res) => {
+    const { _id } = req.body;
+  
+    userModel
+      .findByIdAndUpdate(_id, { isdeleted: true })
+      .then(() => {
+        res.status(200).json({ message: "User has been deleted successfully" });
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
+  };
   
   
   
   
 
-module.exports = { register,login,showUsers};
+module.exports = { register,login,showUsers,deleteUser};
