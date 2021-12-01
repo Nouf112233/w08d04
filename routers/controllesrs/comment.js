@@ -41,9 +41,6 @@ const createcomment = (req, res) => {
 
 const updateComment = (req, res) => {
     const { user, _id, disc ,post} = req.body;
-  
-    if (user == undefined || _id == undefined || disc == undefined||post==undefined)
-      return res.status(400).send("some data are missing");
       userModel
       .find({$and:[{ _id: user},{isdeleted:false}] })
       .then((result)=>{
@@ -59,25 +56,53 @@ const updateComment = (req, res) => {
                   {
                     new: true,
                   }
-                );
-        
-                res.status(200).json(doc);
-              
+                );      
+                res.status(200).json(doc);            
             })
             .catch((err) => {
               res.status(400).send("comment not found");
             });
-
           })
           .catch((err)=>{
             res.status(400).json("post not found");
           })
-
       })
       .catch((err)=>{
         res.status(400).json("User not found");
       })
-   
+  };
+
+  const deleteComment = (req, res) => {
+    const { user, post,_id } = req.body;
+      userModel
+      .find({$and:[{ _id: user},{isdeleted:false}] })
+      .then((result)=>{
+          postModel
+          .find({$and:[{ _id: post},{isdeleted:false}] })
+          .then((result)=>{
+            commentModel
+            .findOne({$and: [ {_id:_id}, {user:user},{post:post}, {isdeleted: false}] })
+            .then(async (result) => {
+                let doc = await commentModel.findOneAndUpdate(
+                  {_id:_id},
+                  {isdeleted:true},
+                  {
+                    new: true,
+                  }
+                );
+                res.status(200).json("comment deleted sucsseful");
+            })
+            .catch((err) => {
+              res.status(400).send("comment not found");
+            });
+          })
+          .catch((err)=>{
+            res.status(400).json("post not found");
+          })
+      })
+      .catch((err)=>{
+        res.status(400).json("User not found");
+      })
    
   };
 
@@ -86,5 +111,6 @@ const updateComment = (req, res) => {
 
 module.exports = {
     createcomment,
-    updateComment
+    updateComment,
+    deleteComment
 };
