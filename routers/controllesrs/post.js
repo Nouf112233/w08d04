@@ -40,7 +40,7 @@ const userModel = require("./../../db/models/user");
         postModel
           .find({$and: [{user: id}, {isdeleted: false}] })
           .then((result) => {
-              if(result)
+              if(result.length>0)
               {
                 res.status(200).json(result);
               }else{
@@ -56,8 +56,28 @@ const userModel = require("./../../db/models/user");
       });
   };
 
+  const getPostById = (req, res) => {
+    const { userId, postId } = req.body;
+    userModel
+      .findById({ _id: userId })
+      .then((result) => {
+        postModel
+          .find({$and: [{ _id: postId},{ user: userId}, {isdeleted: false}] })
+          .then((result) => {
+            if (result.length>0) res.status(200).json(result);
+            else res.status(400).send("user does not has this post ");
+          })
+          .catch((err) => {
+            res.status(400).send("user does not has this post");
+          });
+      })
+      .catch((err) => {
+        res.status(400).json("User not found");
+      });
+  };
+
   
 
 
 
-module.exports = {createPost,getPosts };
+module.exports = {createPost,getPosts,getPostById };
