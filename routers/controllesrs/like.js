@@ -38,7 +38,7 @@ const addlike = (req, res) => {
     });
 };
 
-const taglleLike = (req, res) => {
+const taggleLike = (req, res) => {
   const { user, _id } = req.body;
   userModel
     .findOne({ $and: [{ _id: user }, { isdeleted: false }] })
@@ -63,4 +63,4 @@ const taglleLike = (req, res) => {
     });
 };
 
-module.exports = { addlike, taglleLike };
+module.exports = { addlike, taggleLike };

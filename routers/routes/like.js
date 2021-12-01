@@ -1,8 +1,8 @@
 const express = require("express");
-const {addlike,taglleLike} = require("./../controllesrs/like");
+const {addlike,taggleLike} = require("./../controllesrs/like");
 const likeRouter = express.Router();
 
 likeRouter.post("/like",addlike);
-likeRouter.put("/like",taglleLike);
+likeRouter.put("/like",taggleLike);
 
 module.exports = likeRouter;
