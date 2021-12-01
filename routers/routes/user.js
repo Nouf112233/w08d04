@@ -6,8 +6,8 @@ const authorization=require("./../middelwares/authorization");
 
 userRouter.post("/register", register);
 userRouter.post("/login", login);
-userRouter.get("/users",authontication,authorization, showUsers);
-userRouter.delete("/user",authontication,authorization, deleteUser);
+userRouter.get("/users",authontication, showUsers);
+userRouter.delete("/user",authontication, deleteUser);
 
 
 module.exports = userRouter;
