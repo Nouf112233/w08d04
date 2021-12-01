@@ -83,7 +83,7 @@ const updateComment = (req, res) => {
             commentModel
             .findOne({$and: [ {_id:_id}, {user:user},{post:post}, {isdeleted: false}] })
             .then(async (result) => {
-                let doc = await commentModel.findOneAndUpdate(
+                 await commentModel.findOneAndUpdate(
                   {_id:_id},
                   {isdeleted:true},
                   {
@@ -106,11 +106,61 @@ const updateComment = (req, res) => {
    
   };
 
+  const deleteCommentByPost = (req, res) => {
+    const { user,post,_id } = req.body;
+      userModel
+      .find({$and:[{ _id: user},{isdeleted:false}] })
+      .then((result)=>{
+          postModel
+          .find({$and:[{ _id: post},{isdeleted:false},{user:user}] })
+          .then((result)=>{
+            commentModel
+            .findOne({$and: [ {_id:_id},{post:post}, {isdeleted: false}] })
+            .then(async (result) => {
+                 await commentModel.findOneAndUpdate(
+                  {_id:_id},
+                  {isdeleted:true},
+                  {
+                    new: true,
+                  }
+                );
+                res.status(200).json({ message: "comment has been deleted successfully" });
+            })
+            .catch((err) => {
+              res.status(400).send("comment not found");
+            });
+          })
+          .catch((err)=>{
+            res.status(400).json("post not found");
+          })
+      })
+      .catch((err)=>{
+        res.status(400).json("User not found");
+      })
+   
+  };
+
+  const deleteCommentAdmin = (req, res) => {
+  
+    const { _id } = req.body;
+  
+    commentModel
+      .findByIdAndUpdate(_id, { isdeleted: true })
+      .then(() => {
+        res.status(200).json({ message: "comment has been deleted successfully" });
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
+  };
+
 
 
 
 module.exports = {
     createcomment,
     updateComment,
-    deleteComment
+    deleteComment,
+    deleteCommentByPost,
+    deleteCommentAdmin
 };

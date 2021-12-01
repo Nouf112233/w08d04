@@ -1,5 +1,5 @@
 const express = require("express");
-const {createcomment,updateComment,deleteComment } = require("./../controllesrs/comment");
+const {createcomment,updateComment,deleteComment,deleteCommentByPost,deleteCommentAdmin } = require("./../controllesrs/comment");
 const commentRouter = express.Router();
 const authontication=require("./../middelwares/authontication");
 const authorization=require("./../middelwares/authorization");
@@ -9,7 +9,8 @@ commentRouter.post("/comment",createcomment);
 // postRouter.post("/getPostId",getPostById);
 commentRouter.put("/comment",updateComment);
 commentRouter.delete("/comment",deleteComment);
-// postRouter.delete("/postadmin",authontication,authorization,deletePostByAdmin);
+commentRouter.delete("/commentPost",deleteCommentByPost);
+commentRouter.delete("/commentadmin",authontication,authorization,deleteCommentAdmin);
 
 
 module.exports = commentRouter;
