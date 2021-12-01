@@ -39,9 +39,52 @@ const createcomment = (req, res) => {
     });
 };
 
+const updateComment = (req, res) => {
+    const { user, _id, disc ,post} = req.body;
+  
+    if (user == undefined || _id == undefined || disc == undefined||post==undefined)
+      return res.status(400).send("some data are missing");
+      userModel
+      .find({$and:[{ _id: user},{isdeleted:false}] })
+      .then((result)=>{
+          postModel
+          .find({$and:[{ _id: post},{isdeleted:false}] })
+          .then((result)=>{
+            commentModel
+            .findOne({$and: [ {_id:_id}, {user:user},{post:post}, {isdeleted: false}] })
+            .then(async (result) => {
+                let doc = await commentModel.findOneAndUpdate(
+                  {_id:_id},
+                  {disc:disc},
+                  {
+                    new: true,
+                  }
+                );
+        
+                res.status(200).json(doc);
+              
+            })
+            .catch((err) => {
+              res.status(400).send("comment not found");
+            });
+
+          })
+          .catch((err)=>{
+            res.status(400).json("post not found");
+          })
+
+      })
+      .catch((err)=>{
+        res.status(400).json("User not found");
+      })
+   
+   
+  };
+
 
 
 
 module.exports = {
-    createcomment
+    createcomment,
+    updateComment
 };
