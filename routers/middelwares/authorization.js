@@ -1,9 +1,9 @@
 const roleModel =require("./../../db/models/role");
 
-const authorization=(req,res,next)=>{
+const authorization=async (req,res,next)=>{
     try{
         const roleId=req.token.role;
-        const result=roleModel.findById(roleId);
+        const result=await roleModel.findById(roleId);
         if(result.role==="admin")
         {
             next();

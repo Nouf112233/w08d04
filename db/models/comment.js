@@ -6,10 +6,6 @@ const comment = new mongoose.Schema({
   user: {type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   isdeleted:{type: Boolean, default: false },
   post: {type: mongoose.Schema.Types.ObjectId, ref: "Post", required: true },
- 
-  
-
- 
 });
 
 module.exports = mongoose.model("Comment", comment);
