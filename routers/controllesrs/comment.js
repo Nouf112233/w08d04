@@ -5,11 +5,11 @@ const commentModel = require("./../../db/models/comment");
 const createcomment = (req, res) => {
   const { disc, user, post } = req.body;
   userModel
-    .find({ $and: [{ _id: user }, { isdeleted: false }] })
+    .findOne({ $and: [{ _id: user }, { isdeleted: false }] })
     .then((result) => {
       if (result) {
         postModel
-          .find({ $and: [{ _id: post }, { isdeleted: false }] })
+          .findOne({ $and: [{ _id: post }, { isdeleted: false }] })
           .then((result) => {
             if (result) {
               const newComment = new commentModel({
@@ -42,10 +42,10 @@ const createcomment = (req, res) => {
 const updateComment = (req, res) => {
   const { user, _id, disc, post } = req.body;
   userModel
-    .find({ $and: [{ _id: user }, { isdeleted: false }] })
+    .findOne({ $and: [{ _id: user }, { isdeleted: false }] })
     .then((result) => {
       postModel
-        .find({ $and: [{ _id: post }, { isdeleted: false }] })
+        .findOne({ $and: [{ _id: post }, { isdeleted: false }] })
         .then((result) => {
           commentModel
             .findOne({
@@ -82,10 +82,10 @@ const updateComment = (req, res) => {
 const deleteComment = (req, res) => {
   const { user, post, _id } = req.body;
   userModel
-    .find({ $and: [{ _id: user }, { isdeleted: false }] })
+    .findOne({ $and: [{ _id: user }, { isdeleted: false }] })
     .then((result) => {
       postModel
-        .find({ $and: [{ _id: post }, { isdeleted: false }] })
+        .findOne({ $and: [{ _id: post }, { isdeleted: false }] })
         .then((result) => {
           commentModel
             .findOne({

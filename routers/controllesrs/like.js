@@ -2,9 +2,9 @@ const postModel = require("./../../db/models/post");
 const userModel = require("./../../db/models/user");
 const likeModel = require("./../../db/models/like");
 
-const addlike=(req,res)=>{
-    const {user,post}=req.body;
-    userModel
+const addlike = (req, res) => {
+  const { user, post } = req.body;
+  userModel
     .findOne({ $and: [{ _id: user }, { isdeleted: false }] })
     .then((result) => {
       if (result) {
@@ -36,8 +36,31 @@ const addlike=(req,res)=>{
     .catch((err) => {
       res.status(400).json(err);
     });
-  };
+};
 
+const taglleLike = (req, res) => {
+  const { user, _id } = req.body;
+  userModel
+    .findOne({ $and: [{ _id: user }, { isdeleted: false }] })
+    .then((result) => {
+      likeModel
+        .findOneAndUpdate(
+          { $and: [{ _id: _id }, { user: user }] },
+          { like: !like },
+          {
+            new: true,
+          }
+        )
+        .then((resultt) => {
+          res.status(200).json(resultt);
+        })
+        .catch((err) => {
+          res.status(400).send("like not found");
+        });
+    })
+    .catch((err) => {
+      res.status(400).json("User not found");
+    });
+};
 
-
-module.exports = {addlike};
+module.exports = { addlike, taglleLike };
