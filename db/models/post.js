@@ -5,6 +5,7 @@ const post = new mongoose.Schema({
   time:{type: Date, default: Date.now},
   image:{type: String },
   isdeleted:{type: Boolean, default: false },
+  like:{type: Boolean, default: false },
   user: {type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
  
   

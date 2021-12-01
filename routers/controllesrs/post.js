@@ -76,8 +76,33 @@ const userModel = require("./../../db/models/user");
       });
   };
 
+  const updatePost = (req, res) => {
+    const { user, _id, disc } = req.body;
+  
+    if (user == undefined || _id == undefined || disc == undefined)
+      return res.status(400).send("some data are missing");
+    postModel
+      .findOne({$and: [ {_id:_id}, {user:user}, {isdeleted: false}] })
+      .then(async (result) => {
+        if (result) {
+          let doc = await postModel.findOneAndUpdate(
+            {_id:_id},
+            {disc:disc},
+            {
+              new: true,
+            }
+          );
+  
+          res.status(200).json(doc);
+        } else res.status(400).send("user does not has this post");
+      })
+      .catch((err) => {
+        res.status(400).send("user does not has post");
+      });
+  };
+
   
 
 
 
-module.exports = {createPost,getPosts,getPostById };
+module.exports = {createPost,getPosts,getPostById,updatePost };
