@@ -1,5 +1,6 @@
 const postModel = require("./../../db/models/post");
 const userModel = require("./../../db/models/user");
+const commentModel = require("./../../db/models/comment");
 
 
 
@@ -59,12 +60,23 @@ const userModel = require("./../../db/models/user");
   const getPostById = (req, res) => {
     const { userId, postId } = req.body;
     userModel
-      .findById({ _id: userId })
+      .find({$and: [{ _id: userId}, {isdeleted: false}] })
       .then((result) => {
         postModel
-          .find({$and: [{ _id: postId},{ user: userId}, {isdeleted: false}] })
-          .then((result) => {
-            if (result.length>0) res.status(200).json(result);
+          .find({$and: [{ _id: postId}, {isdeleted: false}] })
+          .then((resul) => {
+            if (resul.length>0)
+            {
+                commentModel
+                .find({$and: [{post: postId},{isdeleted: false}] })
+                .then((result)=>{
+                    res.status(200).json({resul,result});
+                })
+                .catch(()=>{
+                    res.status(200).json(resul);
+                })
+                
+            } 
             else res.status(400).send("user does not has this post ");
           })
           .catch((err) => {
