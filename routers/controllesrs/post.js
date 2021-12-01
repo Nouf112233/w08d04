@@ -133,8 +133,22 @@ const userModel = require("./../../db/models/user");
       });
   };
 
+  const deletePostByAdmin = (req, res) => {
+  
+        const { _id } = req.body;
+      
+        postModel
+          .findByIdAndUpdate(_id, { isdeleted: true })
+          .then(() => {
+            res.status(200).json({ message: "Post has been deleted successfully" });
+          })
+          .catch((err) => {
+            res.status(400).json(err);
+          });
+      };
+
   
 
 
 
-module.exports = {createPost,getPosts,getPostById,updatePost,deletePostById };
+module.exports = {createPost,getPosts,getPostById,updatePost,deletePostById,deletePostByAdmin };
