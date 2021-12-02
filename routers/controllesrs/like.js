@@ -44,7 +44,7 @@ const taggleLike = (req, res) => {
       .then(async (result) => {
         let doc = await likeModel.findOneAndUpdate(
           { _id: _id },
-          { like: !like },
+          { like: !result.like },
           {
             new: true,
           }
@@ -52,6 +52,7 @@ const taggleLike = (req, res) => {
         res.status(200).json(doc);
       })
       .catch((err) => {
+       
         res.status(400).send("like not found");
       });
   } catch (err) {
