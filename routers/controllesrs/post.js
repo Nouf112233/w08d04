@@ -1,19 +1,16 @@
 const postModel = require("./../../db/models/post");
 const userModel = require("./../../db/models/user");
 const commentModel = require("./../../db/models/comment");
+const likeModel = require("./../../db/models/like");
 
 
 
   const createPost = (req, res) => {
-    const { disc, user,image } = req.body;
-  
-    userModel
-      .findOne({$and: [{_id: user},{isdeleted:false}] })
-      .then((result) => {
-        if (result) {
-          const newPost = new postModel({
+    const { disc, userId,image } = req.body;
+
+          try{const newPost = new postModel({
             disc,
-            user,
+            user:userId,
             image
           });
   
@@ -25,21 +22,16 @@ const commentModel = require("./../../db/models/comment");
             .catch((err) => {
               res.status(400).send(err);
             });
-        } else res.status(400).json("User not found");
-      })
-      .catch((err) => {
-        res.status(400).json("User not found");
-      });
+        }catch(err){
+            res.status(400).send(err);
+        }
+ 
   };
 
   const getPosts = (req, res) => {
-    const { id } = req.body;
-  
-    userModel
-      .find({ _id: id })
-      .then((result) => {
-        postModel
-          .find({$and: [{user: id}, {isdeleted: false}] })
+    const { userId } = req.body;
+       try{postModel
+          .find({$and: [{user: userId}, {isdeleted: false}] })
           .then((result) => {
               if(result.length>0)
               {
@@ -51,18 +43,15 @@ const commentModel = require("./../../db/models/comment");
           .catch((err) => {
             res.status(400).json("User not has any posts");
           });
-      })
-      .catch((err) => {
-        res.status(400).json("User not found");
-      });
+        }catch(err){
+            res.status(400).send(err);
+        }
   };
 
   const getPostById = (req, res) => {
     const { userId, postId } = req.body;
-    userModel
-      .find({$and: [{ _id: userId}, {isdeleted: false}] })
-      .then((result) => {
-        postModel
+
+        try{postModel
           .find({$and: [{ _id: postId}, {isdeleted: false}] })
           .then((resul) => {
             if (resul.length>0)
@@ -82,10 +71,10 @@ const commentModel = require("./../../db/models/comment");
           .catch((err) => {
             res.status(400).send("user does not has this post");
           });
-      })
-      .catch((err) => {
-        res.status(400).json("User not found");
-      });
+        }catch(err){
+            res.status(400).send(err);
+        }
+
   };
 
   const updatePost = (req, res) => {

@@ -43,23 +43,49 @@ const taggleLike = (req, res) => {
   userModel
     .findOne({ $and: [{ _id: user }, { isdeleted: false }] })
     .then((result) => {
-      likeModel
-        .findOneAndUpdate(
-          { $and: [{ _id: _id }, { user: user }] },
-          { like: !like },
-          {
-            new: true,
-          }
-        )
-        .then((resultt) => {
-          res.status(200).json(resultt);
-        })
-        .catch((err) => {
-          res.status(400).send("like not found");
-        });
+      if (result) {
+        // let doc = await likeModel.findOneAndUpdate(
+        //           {$and:[ {_id: _id},{user:user}] },
+        //           { like: !like },
+        //           {
+        //             new: true,
+        //           }
+        //         );
+        //         console.log("doc",doc);
+        //         if(doc){
+        //             console.log("doc",doc);
+        //             res.status(200).json(doc);
+        //         }else{
+        //             res.status(400).send("like not found"); 
+        //         }
+          console.log(result);
+        likeModel
+        .findOne({
+            $and: [
+              { _id: _id },
+              { user: user },
+            ],
+          }) 
+          .then( async (resultt) => {
+            let doc = await likeModel.findOneAndUpdate(
+              { _id: _id },
+              { like: !like },
+              {
+                new: true,
+              }
+            );
+            res.status(200).json(doc);
+          })
+          .catch((err) => {
+            res.status(400).send("like not found");
+          }); 
+
+      } else {
+        res.status(400).json("User not found");
+      }
     })
     .catch((err) => {
-      res.status(400).json("User not found");
+      res.status(400).json(err);
     });
 };
 

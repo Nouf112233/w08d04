@@ -6,19 +6,27 @@
 # Backage used:
 
   .express.
+
   .cors.
+
   .mongoose.
+
   .dotenv.
+
   .jsonwebtoken.
+  
   .bcrypt.
 
 # Fouction:
 
  role:
+
      .user
+
      .admin
 
  user:
+
       .create post. 
 
       .delelt post.
