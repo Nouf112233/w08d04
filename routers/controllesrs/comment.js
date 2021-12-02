@@ -3,18 +3,14 @@ const userModel = require("./../../db/models/user");
 const commentModel = require("./../../db/models/comment");
 
 const createcomment = (req, res) => {
-  const { disc, user, post } = req.body;
-  userModel
-    .findOne({ $and: [{ _id: user }, { isdeleted: false }] })
-    .then((result) => {
-      if (result) {
-        postModel
+  const { disc, userId, post } = req.body;
+        try{postModel
           .findOne({ $and: [{ _id: post }, { isdeleted: false }] })
           .then((result) => {
             if (result) {
               const newComment = new commentModel({
                 disc,
-                user,
+                user:userId,
                 post,
               });
               newComment
@@ -32,26 +28,23 @@ const createcomment = (req, res) => {
           .catch((err) => {
             res.status(400).json("Post not found");
           });
-      } else res.status(400).json("User not found");
-    })
-    .catch((err) => {
-      res.status(400).json(err);
-    });
+        }catch(err){
+            res.status(400).send(err);
+        }
+      
 };
 
 const updateComment = (req, res) => {
-  const { user, _id, disc, post } = req.body;
-  userModel
-    .findOne({ $and: [{ _id: user }, { isdeleted: false }] })
-    .then((result) => {
-      postModel
+  const { userId, _id, disc, post } = req.body;
+  
+      try{postModel
         .findOne({ $and: [{ _id: post }, { isdeleted: false }] })
         .then((result) => {
           commentModel
             .findOne({
               $and: [
                 { _id: _id },
-                { user: user },
+                { user: userId },
                 { post: post },
                 { isdeleted: false },
               ],
@@ -73,25 +66,22 @@ const updateComment = (req, res) => {
         .catch((err) => {
           res.status(400).json("post not found");
         });
-    })
-    .catch((err) => {
-      res.status(400).json("User not found");
-    });
+    }catch(err){
+        res.status(400).send(err);
+    }
+    
 };
 
 const deleteComment = (req, res) => {
-  const { user, post, _id } = req.body;
-  userModel
-    .findOne({ $and: [{ _id: user }, { isdeleted: false }] })
-    .then((result) => {
-      postModel
+  const { userId, post, _id } = req.body;
+      try{postModel
         .findOne({ $and: [{ _id: post }, { isdeleted: false }] })
         .then((result) => {
           commentModel
             .findOne({
               $and: [
                 { _id: _id },
-                { user: user },
+                { user: userId },
                 { post: post },
                 { isdeleted: false },
               ],
@@ -113,22 +103,19 @@ const deleteComment = (req, res) => {
         .catch((err) => {
           res.status(400).json("post not found");
         });
-    })
-    .catch((err) => {
-      res.status(400).json("User not found");
-    });
+    }catch(err){
+        res.status(400).send(err);
+    }
+    
 };
 
 const deleteCommentByPost = (req, res) => {
-  const { user, post, _id } = req.body;
-  userModel
-    .find({ $and: [{ _id: user }, { isdeleted: false }] })
-    .then((resul) => {
-      if (resul.length > 0) {
-        postModel
-          .find({ $and: [{ _id: post }, { isdeleted: false }, { user: user }] })
+  const { userId, post, _id } = req.body;
+ 
+        try{postModel
+          .findOne({ $and: [{ _id: post }, { isdeleted: false }, { user: userId }] })
           .then((result) => {
-            if (result.length > 0) {
+            if (result) {
               commentModel
                 .findOne({
                   $and: [{ _id: _id }, { post: post }, { isdeleted: false }],
@@ -137,7 +124,7 @@ const deleteCommentByPost = (req, res) => {
                   if (resultt) {
                     await commentModel.findOneAndUpdate(
                       { _id: _id },
-                      { isdeleted: false },
+                      { isdeleted: true },
                       {
                         new: true,
                       }
@@ -157,17 +144,16 @@ const deleteCommentByPost = (req, res) => {
           .catch((err) => {
             res.status(400).json("post not found");
           });
-      }
-    })
-    .catch((err) => {
-      res.status(400).json("User not found");
-    });
+        }catch(err){
+            res.status(400).send(err);
+        }
+      
 };
 
 const deleteCommentAdmin = (req, res) => {
   const { _id } = req.body;
 
-  commentModel
+  try{commentModel
     .findByIdAndUpdate(_id, { isdeleted: true })
     .then(() => {
       res
@@ -175,8 +161,11 @@ const deleteCommentAdmin = (req, res) => {
         .json({ message: "comment has been deleted successfully" });
     })
     .catch((err) => {
-      res.status(400).json(err);
+      res.status(400).json("comment not exit");
     });
+}catch(err){
+    res.status(400).send(err);
+}
 };
 
 module.exports = {

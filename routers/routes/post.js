@@ -7,8 +7,8 @@ const {adminAuthorization,userAuthorization}=require("./../middelwares/authoriza
 postRouter.post("/post",authontication,userAuthorization,createPost);
 postRouter.post("/getpost",authontication,userAuthorization,getPosts);
 postRouter.post("/getPostId",authontication,userAuthorization,getPostById);
-postRouter.put("/post",updatePost);
-postRouter.delete("/post",deletePostById);
+postRouter.put("/post",authontication,userAuthorization,updatePost);
+postRouter.delete("/post",authontication,userAuthorization,deletePostById);
 postRouter.delete("/postadmin",authontication,adminAuthorization,deletePostByAdmin);
 
 
