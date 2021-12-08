@@ -1,47 +1,53 @@
 # About the project
+## Social Media Website Backend
  
-  login and register using hash password and token , and user add post and comment 
-  and like for post with authintication and authorization.
+  This is a backend for a social media website built in Express.
 
-# Backage used:
+# Installing Dependencies
 
-  .express.
+## Node js
+Follow instructions to install the latest version of Node js for your platform in the Node js docs.
 
-  .cors.
+## NPM Dependencies
+Once you have the project in your local machine, install dependencies by running:
 
-  .mongoose.
+npm install
 
-  .dotenv.
+This will install all of the required packages.
 
-  .jsonwebtoken.
-  
-  .bcrypt.
+### Key Dependencies
+. Express is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.
 
-# Fouction:
+. mongoose is an elegant mongodb object modeling for node.js.
 
- role:
+. morgan is a HTTP request logger middleware for node.js.
 
-     .user
+. bcrypt is a A library to help you hash passwords.
 
-     .admin
+. jsonwebtoken is a JSON Web Token implementation (symmetric and asymmetric).
 
- user:
+### Setting up the variables
+You have to set up some variables in the .env file, for the app to run properly.
 
-      .create post. 
+PORT=5000
+DB_URL=`Your MongoDB DB URL`
+SALT=`Your SALT here`
+SECRET_KEY=`Your SECRET KEY here`
 
-      .delelt post.
+ ### role:
 
-      .update post.  
+    .user
+    .admin
 
-      .get all post. 
+ ### user:
 
-      .get post by id with own comment.
-
-      .create comment for post.
-
-      .delete comment,
-
-      .update comment.
+    .create post. 
+    .delelt post.
+    .update post.  
+    .get all post. 
+    .get post by id with own comment.
+    .delete comment,
+    .update comment.
 
       
 
