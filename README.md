@@ -54,3 +54,6 @@
       .delete any post by id.
 
       .delete any comment by id
+
+      # digrame
+      ![Diagram.drawio img](https://github.com/Nouf112233/w08d04/blob/main/Diagram.drawio.png)
