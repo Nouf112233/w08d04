@@ -6,7 +6,8 @@ const likeModel = require("./../../db/models/like");
 
 
   const createPost = (req, res) => {
-    const { disc, userId,image } = req.body;
+    const userId=req.token.id;
+    const { disc,image } = req.body;
 
           try{const newPost = new postModel({
             disc,
@@ -29,7 +30,7 @@ const likeModel = require("./../../db/models/like");
   };
 
   const getPosts = (req, res) => {
-    const { userId } = req.body;
+    const userId=req.token.id;
        try{postModel
           .find({$and: [{user: userId}, {isdeleted: false}] })
           .then((result) => {
@@ -49,10 +50,11 @@ const likeModel = require("./../../db/models/like");
   };
 
   const getPostById = (req, res) => {
-    const { userId, postId } = req.body;
+    const userId=req.token.id;
+    const { postId } = req.body;
 
         try{postModel
-          .find({$and: [{ _id: postId}, {isdeleted: false}] })
+          .find({$and: [{ _id: postId},{ user: userId}, {isdeleted: false}] })
           .then((resul) => {
             if (resul.length>0)
             {
@@ -78,7 +80,8 @@ const likeModel = require("./../../db/models/like");
   };
 
   const updatePost = (req, res) => {
-    const { userId, _id, disc } = req.body;
+    const userId=req.token.id;
+    const {  _id, disc } = req.body;
   
     try{postModel
       .findOne({$and: [ {_id:_id}, {user:userId}, {isdeleted: false}] })
@@ -104,7 +107,8 @@ const likeModel = require("./../../db/models/like");
   };
 
   const deletePostById = (req, res) => {
-    const { userId, _id } = req.body;
+    const userId=req.token.id;
+    const { _id } = req.body;
   
        try{postModel
           .findOne({$and: [{_id}, {user:userId}] })

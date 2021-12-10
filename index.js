@@ -7,6 +7,7 @@ require("./db/index");
 
 const app = express();
 
+
 app.use(express.json());
 app.use(cors());
 
@@ -24,6 +25,10 @@ app.use(commentRouter);
 
 const likeRouter = require("./routers/routes/like");
 app.use(likeRouter);
+
+
+
+
 
 
 const PORT = process.env.PORT || 5000;

@@ -4,11 +4,11 @@ const postRouter = express.Router();
 const authontication=require("./../middelwares/authontication");
 const {adminAuthorization,userAuthorization}=require("./../middelwares/authorization");
 
-postRouter.post("/post",authontication,userAuthorization,createPost);
-postRouter.post("/getpost",authontication,userAuthorization,getPosts);
-postRouter.post("/getPostId",authontication,userAuthorization,getPostById);
-postRouter.put("/post",authontication,userAuthorization,updatePost);
-postRouter.delete("/post",authontication,userAuthorization,deletePostById);
+postRouter.post("/post",authontication,createPost);
+postRouter.get("/getpost",authontication,getPosts);
+postRouter.post("/getPostId",authontication,getPostById);
+postRouter.put("/post",authontication,updatePost);
+postRouter.delete("/post",authontication,deletePostById);
 postRouter.delete("/postadmin",authontication,adminAuthorization,deletePostByAdmin);
 
 
