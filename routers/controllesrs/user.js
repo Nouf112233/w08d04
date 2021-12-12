@@ -7,6 +7,9 @@ const secret = process.env.secretKey;
 const nodemailer = require("nodemailer");
 const passport = require('passport');
 
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 
 ///  google authontication
 // const passport=require("passport");
@@ -311,11 +314,47 @@ const changepass=(req,res)=>{
 
 };
 
-const google=(req,res)=>{
-  console.log("User",req.user);
-  res.json("Thank you for signing in!");
-}
+const googlelogin = (req, res) => {
+  const { idToken } = req.body;
+  client
+    .verifyIdToken({
+      idToken,
+      audience: `${process.env.GOOGLE_CLIENT_ID}`,
+    })
+    .then((response) => {
+      console.log(response);
+      const { email_verified, name, email } = response.payload;
+      if (email_verified) {
+        userModel.findOne({ email }).exec((err, user) => {
+          if (err) {
+            return res.status(400).json("somthing went wrong...");
+          } else {
+            if (user) {
+              const token = jwt.sign({ _id: user._id }, secret);
+              const { _id, username, email, role } = user;
+              console.log(token, _id, email, "backkkkk to front ");
+              res
+                .status(200)
+                .json({ token, user: { _id, username, email, role } });
+            } else {
+              const newUser = new userModel({
+                email,
+                username: name.trim(),
+                role: "61a732da694d3b6362ba9e97",
+                active: true,
+              });
 
+              newUser.save().then((result) => {
+                const token = jwt.sign({ _id: result._id }, secret);
+                const { _id, name, email } = newUser;
+                res.json({ token, user: { _id, name, email } });
+              });
+            }
+          }
+        });
+      }
+    });
+};
 
 
 
@@ -328,5 +367,5 @@ module.exports = {
   resendLink,
   forgitpass,
   changepass,
-  google
+  googlelogin,
 };
