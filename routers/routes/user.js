@@ -1,5 +1,5 @@
 const express = require("express");
-const { register,login,showUsers,deleteUser,confirmEmail,resendLink ,forgitpass,changepass,googlelogin} = require("./../controllesrs/user");
+const { register,login,showUsers,deleteUser,confirmEmail,resendLink ,forgitpass,changepass} = require("./../controllesrs/user");
 const userRouter = express.Router();
 const authontication=require("./../middelwares/authontication");
 const {adminAuthorization,userAuthorization}=require("./../middelwares/authorization");
@@ -17,7 +17,7 @@ userRouter.get('/confirmation/:email/:rand',confirmEmail);
 userRouter.post('/resendlink',resendLink);
 userRouter.post('/forgit',forgitpass);
 userRouter.post('/changpass',changepass);
-userRouter.post("/googlelogin", googlelogin);
+// userRouter.post("/googlelogin", googlelogin);
 
 
 

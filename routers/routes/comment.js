@@ -4,11 +4,11 @@ const commentRouter = express.Router();
 const authontication=require("./../middelwares/authontication");
 const {adminAuthorization,userAuthorization}=require("./../middelwares/authorization");
 
-commentRouter.post("/comment",authontication,userAuthorization,createcomment);
-commentRouter.put("/comment",authontication,userAuthorization,updateComment);
-commentRouter.delete("/comment",authontication,userAuthorization,deleteComment);
+commentRouter.post("/comment",authontication,createcomment);
+commentRouter.put("/comment",authontication,updateComment);
+commentRouter.delete("/comment/:_id",authontication,deleteComment);
 commentRouter.delete("/commentPost",authontication,userAuthorization,deleteCommentByPost);
-commentRouter.delete("/commentadmin",authontication,adminAuthorization,deleteCommentAdmin);
+commentRouter.delete("/commentadmin",authontication,deleteCommentAdmin);
 
 
 module.exports = commentRouter;
